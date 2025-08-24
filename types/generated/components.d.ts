@@ -1,75 +1,71 @@
-import type { Struct, Schema } from '@strapi/strapi';
+import type { Schema, Struct } from '@strapi/strapi';
 
-export interface SharedSlider extends Struct.ComponentSchema {
-  collectionName: 'components_shared_sliders';
+export interface BlocksGallery extends Struct.ComponentSchema {
+  collectionName: 'components_blocks_galleries';
   info: {
-    displayName: 'Slider';
-    icon: 'address-book';
-    description: '';
+    displayName: 'Gallery';
   };
   attributes: {
-    files: Schema.Attribute.Media<'images', true>;
+    caption: Schema.Attribute.String;
+    items: Schema.Attribute.Media<'images', true>;
   };
 }
 
-export interface SharedSeo extends Struct.ComponentSchema {
-  collectionName: 'components_shared_seos';
+export interface BlocksIFrameEmbed extends Struct.ComponentSchema {
+  collectionName: 'components_blocks_i_frame_embeds';
   info: {
-    name: 'Seo';
-    icon: 'allergies';
-    displayName: 'Seo';
-    description: '';
+    displayName: 'IFrame embed';
   };
   attributes: {
-    metaTitle: Schema.Attribute.String & Schema.Attribute.Required;
-    metaDescription: Schema.Attribute.Text & Schema.Attribute.Required;
-    shareImage: Schema.Attribute.Media<'images'>;
+    allow: Schema.Attribute.String &
+      Schema.Attribute.DefaultTo<'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen'>;
+    sandbox: Schema.Attribute.String &
+      Schema.Attribute.DefaultTo<'allow-scripts allow-same-origin'>;
+    src: Schema.Attribute.String;
+    title: Schema.Attribute.String;
   };
 }
 
-export interface SharedRichText extends Struct.ComponentSchema {
-  collectionName: 'components_shared_rich_texts';
+export interface BlocksImage extends Struct.ComponentSchema {
+  collectionName: 'components_blocks_images';
+  info: {
+    displayName: 'Image';
+  };
+  attributes: {
+    caption: Schema.Attribute.String;
+    media: Schema.Attribute.Media<'images'>;
+  };
+}
+
+export interface BlocksRichText extends Struct.ComponentSchema {
+  collectionName: 'components_blocks_rich_texts';
   info: {
     displayName: 'Rich text';
-    icon: 'align-justify';
-    description: '';
   };
   attributes: {
-    body: Schema.Attribute.RichText;
+    content: Schema.Attribute.Blocks;
   };
 }
 
-export interface SharedQuote extends Struct.ComponentSchema {
-  collectionName: 'components_shared_quotes';
+export interface BlocksVideoEmbed extends Struct.ComponentSchema {
+  collectionName: 'components_blocks_video_embeds';
   info: {
-    displayName: 'Quote';
-    icon: 'indent';
+    displayName: 'Video embed';
   };
   attributes: {
-    title: Schema.Attribute.String;
-    body: Schema.Attribute.Text;
-  };
-}
-
-export interface SharedMedia extends Struct.ComponentSchema {
-  collectionName: 'components_shared_media';
-  info: {
-    displayName: 'Media';
-    icon: 'file-video';
-  };
-  attributes: {
-    file: Schema.Attribute.Media<'images' | 'files' | 'videos'>;
+    provider: Schema.Attribute.Enumeration<['youtube', 'vimeo']>;
+    url: Schema.Attribute.String;
   };
 }
 
 declare module '@strapi/strapi' {
   export module Public {
     export interface ComponentSchemas {
-      'shared.slider': SharedSlider;
-      'shared.seo': SharedSeo;
-      'shared.rich-text': SharedRichText;
-      'shared.quote': SharedQuote;
-      'shared.media': SharedMedia;
+      'blocks.gallery': BlocksGallery;
+      'blocks.i-frame-embed': BlocksIFrameEmbed;
+      'blocks.image': BlocksImage;
+      'blocks.rich-text': BlocksRichText;
+      'blocks.video-embed': BlocksVideoEmbed;
     }
   }
 }

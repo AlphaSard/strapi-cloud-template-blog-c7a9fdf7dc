@@ -1,0 +1,24 @@
+{
+  "collectionName": "components_blocks_i_frame_embeds",
+  "info": {
+    "displayName": "IFrame embed"
+  },
+  "options": {},
+  "attributes": {
+    "src": {
+      "type": "string"
+    },
+    "title": {
+      "type": "string"
+    },
+    "allow": {
+      "type": "string",
+      "default": "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen"
+    },
+    "sandbox": {
+      "type": "string",
+      "default": "allow-scripts allow-same-origin"
+    }
+  },
+  "config": {}
+}
