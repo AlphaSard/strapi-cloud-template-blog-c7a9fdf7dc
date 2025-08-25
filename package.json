@@ -25,16 +25,11 @@
     "styled-components": "^6.0.0"
   },
   "engines": {
-    "node": ">=20 <21"
+    "node": ">=20 <23"
   },
-  "packageManager": "pnpm@10.15.0",
+  "packageManager": "yarn@1.22.22",
   "volta": {
     "node": "20.19.4",
     "pnpm": "10.15.0"
-  },
-  "pnpm": {
-    "overrides": {
-      "node-schedule": "2.1.0"
-    }
   }
 }
