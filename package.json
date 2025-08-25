@@ -31,5 +31,10 @@
   "volta": {
     "node": "20.19.4",
     "pnpm": "10.15.0"
+  },
+  "pnpm": {
+    "overrides": {
+      "node-schedule": "2.1.0"
+    }
   }
 }
