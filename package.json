@@ -25,8 +25,14 @@
 		"styled-components": "^6.0.0"
 	},
 	"engines": {
-    "node": ">=18 <23"
-    },
+		"node": "20.19.4"
+	},
+	"packageManager": "pnpm@10.15.0",
+	"pnpm": {
+		"overrides": {
+			"node-schedule": "2.1.1"
+		}
+	},
 	"volta": {
 		"node": "20.19.4",
 		"pnpm": "10.15.0"
