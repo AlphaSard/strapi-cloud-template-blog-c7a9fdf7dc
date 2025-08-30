@@ -20,6 +20,11 @@ module.exports = (config, { strapi }) => {
         jwt.verify(token, secret);
 
         // Auth OK: rewrite to content-api route
+        // Also adapt body shape: admin route wraps payload under { data: {...} }
+        // while content-api route expects fields at the root.
+        if (ctx.request?.body && typeof ctx.request.body === 'object' && ctx.request.body.data) {
+          ctx.request.body = ctx.request.body.data;
+        }
         ctx.url = '/strapi-import-export/content/export/contentTypes';
         ctx.path = '/strapi-import-export/content/export/contentTypes';
       } catch (err) {
