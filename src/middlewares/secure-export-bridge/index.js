@@ -23,14 +23,34 @@ module.exports = (config, { strapi }) => {
           jwt.verify(token, secret);
         }
 
-        // Auth OK: rewrite to content-api route
-        // Also adapt body shape: admin route wraps payload under { data: {...} }
-        // while content-api route expects fields at the root.
-        if (ctx.request?.body && typeof ctx.request.body === 'object' && ctx.request.body.data) {
-          ctx.request.body = ctx.request.body.data;
+        // Auth OK: directly invoke plugin export service and return
+        const payload = (ctx.request?.body && typeof ctx.request.body === 'object' && ctx.request.body.data)
+          ? ctx.request.body.data
+          : ctx.request.body || {};
+
+        const {
+          slug,
+          search = '',
+          applySearch = false,
+          exportFormat = 'json',
+          relationsAsId = false,
+          deepness = 5,
+          exportPluginsContentTypes = false,
+        } = payload || {};
+
+        if (!slug) {
+          return ctx.badRequest('Missing slug');
         }
-        ctx.url = '/strapi-import-export/content/export/contentTypes';
-        ctx.path = '/strapi-import-export/content/export/contentTypes';
+
+        const exportService = strapi.plugin('strapi-import-export').service('export');
+        let data;
+        if (exportFormat === exportService.formats.JSON_V2) {
+          data = await exportService.exportDataV2({ slug, search, applySearch, deepness, exportPluginsContentTypes });
+        } else {
+          data = await exportService.exportData({ slug, search, applySearch, exportFormat, relationsAsId, deepness });
+        }
+        ctx.body = { data };
+        return; // stop pipeline
       } catch (err) {
         return ctx.unauthorized('Missing or invalid credentials');
       }
