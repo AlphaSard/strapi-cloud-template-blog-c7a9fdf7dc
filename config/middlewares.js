@@ -19,6 +19,7 @@ module.exports = [
 	"strapi::logger",
 	"strapi::query",
 	"strapi::body",
+	{ resolve: './src/middlewares/block-export-content-api' },
 	{ resolve: './src/middlewares/secure-export-bridge' },
 	"strapi::session",
 	"strapi::favicon",
