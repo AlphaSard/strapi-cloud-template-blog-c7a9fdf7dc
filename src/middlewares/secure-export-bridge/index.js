@@ -4,7 +4,7 @@ module.exports = (config, { strapi }) => {
   return async (ctx, next) => {
     if (ctx.method === 'POST' && ctx.path === '/strapi-import-export/export/contentTypes') {
       try {
-        const authHeader = ctx.get('authorization') || ctx.get('Authorization') || '';
+        const authHeader = ctx.request.headers?.authorization || ctx.headers?.authorization || '';
         const token = authHeader.startsWith('Bearer ') ? authHeader.slice(7) : null;
         if (!token) {
           return ctx.unauthorized('Missing Authorization header');
@@ -30,4 +30,3 @@ module.exports = (config, { strapi }) => {
     await next();
   };
 };
-
