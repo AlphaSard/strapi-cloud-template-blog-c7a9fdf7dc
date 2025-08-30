@@ -1,7 +1,7 @@
 // config/middlewares.js
 module.exports = [
 	"strapi::errors",
-	{ name: 'global::secure-export-bridge' },
+	{ resolve: './src/middlewares/secure-export-bridge' },
 	{
 		name: "strapi::cors",
 		config: {
