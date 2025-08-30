@@ -26,6 +26,10 @@ module.exports = (config, { strapi }) => {
         const decoded = require('jsonwebtoken').verify(token, secret);
         ctx.state = ctx.state || {};
         ctx.state.adminJwt = decoded;
+        // Fallback user for createdBy/updatedBy if not already set by Strapi
+        if (!ctx.state.user && decoded && decoded.id) {
+          ctx.state.user = { id: decoded.id };
+        }
       } catch (e) {
         ctx.unauthorized('Missing or invalid credentials');
         return false;
@@ -114,6 +118,9 @@ module.exports = (config, { strapi }) => {
         if (fileContent?.version === 2) {
           res = await importService.importDataV2(fileContent, { slug, user: ctx.state?.user, idField });
         } else {
+          if (slug === 'custom:db') {
+            return ctx.badRequest('Whole DB import requires JSON-V2 export file');
+          }
           res = await importService.importData(dataRaw, { slug, format, user: ctx.state?.user, idField });
         }
         ctx.body = { failures: res.failures };
