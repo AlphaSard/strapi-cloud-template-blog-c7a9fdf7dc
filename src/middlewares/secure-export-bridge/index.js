@@ -78,6 +78,12 @@ module.exports = (config, { strapi }) => {
       try {
         if (!ensureAdminAuth(ctx)) return;
         const slug = decodeURIComponent(ctx.path.replace('/strapi-import-export/import/model-attributes/', ''));
+        if (slug === 'custom:db') {
+          // Whole DB: there is no single model. Return minimal attributes list for UI.
+          const names = ['id'];
+          ctx.body = { data: { attribute_names: names } };
+          return;
+        }
         const model = strapi.getModel(slug);
         if (!model || !model.attributes) {
           return ctx.notFound('Unknown model slug');
