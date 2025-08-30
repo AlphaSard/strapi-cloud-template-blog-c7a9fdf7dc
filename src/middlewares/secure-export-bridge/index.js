@@ -5,7 +5,9 @@ module.exports = (config, { strapi }) => {
     if (ctx.method === 'POST' && ctx.path === '/strapi-import-export/export/contentTypes') {
       try {
         const authHeader = ctx.request.headers?.authorization || ctx.headers?.authorization || '';
-        const token = authHeader && authHeader.startsWith('Bearer ') ? authHeader.slice(7) : null;
+        const headerToken = authHeader && authHeader.startsWith('Bearer ') ? authHeader.slice(7) : '';
+        const cookieToken = ctx.cookies?.get && ctx.cookies.get('jwtToken') ? ctx.cookies.get('jwtToken') : '';
+        const token = headerToken || cookieToken;
         const hasAdminState = !!(ctx.state && ctx.state.user);
         if (!token && !hasAdminState) {
           return ctx.unauthorized('Missing Authorization header');
