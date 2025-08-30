@@ -14,6 +14,7 @@
     "rebuild:native": "pnpm rebuild -r || true"
   },
   "dependencies": {
+    "@swc/core": "^1.13.5",
     "@strapi/plugin-cloud": "5.15.0",
     "@strapi/plugin-users-permissions": "5.15.0",
     "@strapi/strapi": "5.15.0",
