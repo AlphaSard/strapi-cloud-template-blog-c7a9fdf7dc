@@ -5,19 +5,21 @@ module.exports = (config, { strapi }) => {
     if (ctx.method === 'POST' && ctx.path === '/strapi-import-export/export/contentTypes') {
       try {
         const authHeader = ctx.request.headers?.authorization || ctx.headers?.authorization || '';
-        const token = authHeader.startsWith('Bearer ') ? authHeader.slice(7) : null;
-        if (!token) {
+        const token = authHeader && authHeader.startsWith('Bearer ') ? authHeader.slice(7) : null;
+        const hasAdminState = !!(ctx.state && ctx.state.user);
+        if (!token && !hasAdminState) {
           return ctx.unauthorized('Missing Authorization header');
         }
 
-        const secret = process.env.ADMIN_JWT_SECRET;
-        if (!secret) {
-          strapi.log.warn('ADMIN_JWT_SECRET is not set; refusing export bridge');
-          return ctx.unauthorized('Missing or invalid credentials');
+        if (token) {
+          const secret = process.env.ADMIN_JWT_SECRET;
+          if (!secret) {
+            strapi.log.warn('ADMIN_JWT_SECRET is not set; refusing export bridge');
+            return ctx.unauthorized('Missing or invalid credentials');
+          }
+          // Verify admin JWT; throws if invalid/expired
+          jwt.verify(token, secret);
         }
-
-        // Verify admin JWT; throws if invalid/expired
-        jwt.verify(token, secret);
 
         // Auth OK: rewrite to content-api route
         // Also adapt body shape: admin route wraps payload under { data: {...} }

@@ -1,7 +1,6 @@
 // config/middlewares.js
 module.exports = [
 	"strapi::errors",
-	{ resolve: './src/middlewares/secure-export-bridge' },
 	{
 		name: "strapi::cors",
 		config: {
@@ -20,6 +19,7 @@ module.exports = [
 	"strapi::logger",
 	"strapi::query",
 	"strapi::body",
+	{ resolve: './src/middlewares/secure-export-bridge' },
 	"strapi::session",
 	"strapi::favicon",
 	"strapi::public",
