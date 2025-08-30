@@ -8,6 +8,7 @@
     "deploy": "strapi deploy",
     "develop": "strapi develop",
     "seed:example": "node ./scripts/seed.js",
+    "validate:export": "node ./scripts/validate-export.js",
     "start": "strapi start",
     "strapi": "strapi",
     "rebuild:native": "pnpm rebuild -r || true"
